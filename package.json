@@ -1,5 +1,6 @@
 {
     "name": "limousinesltd-geotab",
+    "homepage": "https://github.io",
     "private": true,
     "type": "module",
     "imports": {
@@ -14,7 +15,8 @@
         "test": "vitest run",
         "lint": "eslint",
         "format": "prettier --write . && eslint --fix",
-        "check": "prettier --check ."
+        "check": "prettier --check .",
+        "deploy": "gh-pages -d dist"
     },
     "dependencies": {
         "@daypicker/react": "^10.0.1",
@@ -47,6 +49,7 @@
         "@types/react-dom": "^19.2.0",
         "@vitejs/plugin-react": "^6.0.1",
         "eslint": "^9.20.0",
+        "gh-pages": "^6.3.0",
         "jsdom": "^28.1.0",
         "prettier": "^3.9.4",
         "prettier-plugin-classnames": "^0.10.3",
