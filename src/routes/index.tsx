@@ -13,8 +13,8 @@ function LandingPage() {
                 </p>
             </header>
             <main className="flex flex-col items-center h-full justify-center">
-                <Link to="/reports" className="btn-primary w-fit px-4! shadow-md">
-                    Custom Reports
+                <Link to="/login" className="btn-primary w-fit px-4! shadow-md">
+                    Login
                 </Link>
             </main>
         </div>

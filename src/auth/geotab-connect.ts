@@ -60,23 +60,7 @@ export async function geotabConnect(): Promise<void> {
         return;
     }
 
-    // -----------------------------
-    // 3. DEV MODE (manual login)
-    // -----------------------------
-    const api = await devLoginFlow();
-
-    setApi(api);
-
-    const { credentials } = await api.getSession();
-
-    if (!credentials.sessionId) throw new Error('Failed to get session ID');
-
-    saveSession({
-        database: credentials.database,
-        userName: credentials.userName,
-        sessionId: credentials.sessionId,
-        server: import.meta.env.VITE_GEOTAB_SERVER,
-    });
+    throw new Error('No session found');
 }
 
 /**
@@ -95,28 +79,4 @@ function waitForGeotabMessage(): Promise<any> {
 
         window.addEventListener('message', handler);
     });
-}
-
-/**
- * Handles the developer login flow for authenticating with the Geotab API.
- *
- * This method initializes a Geotab API instance using credentials and server details
- * provided through environment variables, performs authentication, and returns
- * the authenticated API instance for further use.
- *
- * @return {Promise<GeotabApi<Partial<GeotabApi.Options>>>} A promise that resolves to an authenticated Geotab API instance.
- */
-async function devLoginFlow(): Promise<GeotabApi<Partial<GeotabApi.Options>>> {
-    const api = new GeotabApi({
-        credentials: {
-            database: import.meta.env.VITE_GEOTAB_DATABASE,
-            userName: import.meta.env.VITE_GEOTAB_USER,
-            password: import.meta.env.VITE_GEOTAB_PASSWORD,
-        },
-        path: import.meta.env.VITE_GEOTAB_SERVER,
-    });
-
-    await api.authenticate();
-
-    return api;
 }

@@ -1,6 +1,5 @@
 {
     "name": "limousinesltd-geotab",
-    "homepage": "https://github.io",
     "private": true,
     "type": "module",
     "imports": {
@@ -16,6 +15,7 @@
         "lint": "eslint",
         "format": "prettier --write . && eslint --fix",
         "check": "prettier --check .",
+        "predeploy": "npm run build",
         "deploy": "gh-pages -d dist"
     },
     "dependencies": {
