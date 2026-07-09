@@ -9,7 +9,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import * as path from 'node:path';
 
 const config = defineConfig({
-    base: '/limousinesltd-geotab/',
+    base: process.env.NODE_ENV === 'production' ? '/limousinesltd-geotab/' : '/',
     resolve: { tsconfigPaths: true, alias: { '@': path.resolve(__dirname, './src') } },
     plugins: [
         devtools(),
