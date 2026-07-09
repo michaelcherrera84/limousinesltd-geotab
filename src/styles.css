@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+@theme {
+    --font-sans: Roboto, "Segoe UI", Segoe, "Helvetica Neue", Helvetica, sans-serif;
+    --color-primary: #1F2833FF;
+
+    --button-primary: #0078d3;
+
+    --border-primary: #c0ccd8;
+    --border-hover: #748FAA;
+
+    --dropdown-hover: #E6EBEF;
+}
+
+:root {
+    font-family: var(--font-sans), sans-serif;
+    color: var(--color-primary);
+}
+
+.btn-primary {
+    @apply text-xs bg-(--button-primary) text-white border border-(--button-primary) text-center tracking-[0.02rem] cursor-pointer outline-0 p-1.75 rounded hover:bg-[color-mix(in_srgb,var(--button-primary),black_20%)] shadow-gray-400;
+}
+
+.rdp-root {
+    --rdp-today-color: var(--button-primary) !important;
+    --rdp-accent-color: var(--button-primary) !important;
+}
