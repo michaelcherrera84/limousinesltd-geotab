@@ -1,0 +1,14 @@
+{
+    "name": "Limousines LTD Add-in",
+    "supportEmail": "michael.c.herrera@icloud.com",
+    "version": "1.0",
+    "items": [
+        {
+            "url": "https://michaelcherrera84.github.io/limousinesltd-geotab/reports",
+            "path": "ReportsId/",
+            "menuName": {
+                "en": "Limousines LTD Reports"
+            }
+        }
+    ]
+}
