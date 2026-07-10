@@ -2,6 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { PiVan } from 'react-icons/pi';
 import { GoTable } from 'react-icons/go';
 import { ChevronRightIcon } from 'lucide-react';
+import { useEffect } from 'react';
+import { geotabConnect } from '#/auth/geotab-connect.ts';
 
 export const Route = createFileRoute('/reports/')({
     head: () => ({
@@ -17,6 +19,20 @@ export const Route = createFileRoute('/reports/')({
 });
 
 function ReportsDashboard() {
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                await geotabConnect();
+            } catch (error) {
+                console.error('Error connecting to Geotab:', error);
+                return (
+                    <div>Error Loading Add-in</div>
+                )
+            }
+        };
+        void checkSession();
+    }, []);
+
     return (
         <section className="flex w-full flex-col">
             <header className="flex h-28 items-center border-b border-b-(--border-primary) p-6">
