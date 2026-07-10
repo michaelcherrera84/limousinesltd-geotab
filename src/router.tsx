@@ -4,14 +4,10 @@ import { routeTree } from './routeTree.gen';
 export function getRouter() {
     const router = createTanStackRouter({
         routeTree,
-        basepath: "/limousinesltd-geotab",
         scrollRestoration: true,
         defaultPreload: 'intent',
         defaultPreloadStaleTime: 0,
     });
-
-    console.log("basepath:", router.options.basepath);
-    console.log("location:", window.location.pathname);
 
     return router;
 }

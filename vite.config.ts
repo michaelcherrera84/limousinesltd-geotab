@@ -19,7 +19,7 @@ const config = defineConfig({
             include: ['fs', 'net', 'tls'], // Prevent Geotab library from crashing browser builds
         }),
     ],
-    base: process.env.NODE_ENV === "production" ? "/limousinesltd-geotab/" : "/",
+    base: process.env.NODE_ENV === "production" ? "./" : "/",
 });
 
 export default config;

@@ -4,9 +4,13 @@ import { routeTree } from './routeTree.gen';
 
 const router = createRouter({
     routeTree,
+    basepath: "/limousinesltd-geotab",
     defaultPreload: 'intent',
     scrollRestoration: true,
 });
+
+console.log("basepath:", router.options.basepath);
+console.log("location:", window.location.pathname);
 
 declare module '@tanstack/react-router' {
     interface Register {
