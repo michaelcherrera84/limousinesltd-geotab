@@ -1,3 +1,5 @@
+export const CATEGORIES = ['All', 'Business', 'Personal'];
+
 export type Asset = {
     id: string;
     name: string;
@@ -10,7 +12,7 @@ export type Driver = {
 };
 
 export type Data = {
-    date: string;
+    date?: string;
     start: string;
     stop: string;
     id: string;
@@ -19,8 +21,8 @@ export type Data = {
     endLocation: string;
     locationType: string[];
     distance: number;
-    drivingDuration: number;
-    stopDuration: number;
+    drivingDuration: string;
+    stopDuration: string;
     category: string;
     annotation: string;
     customer: string;
@@ -29,7 +31,7 @@ export type Data = {
 export type Ticket = {
     driver: string;
     locations: string[];
-    duration: number;
+    duration: string;
     time: string;
     suggestedTime: string;
     distance: number;

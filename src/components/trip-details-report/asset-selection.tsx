@@ -13,6 +13,22 @@ function AssetSelection({ selectedAssets, setSelectedAssets }: AssetSelectionPro
     const [assets, setAssets] = useState<Asset[]>([]);
     const [showPlaceholder, setShowPlaceholder] = useState(true);
 
+    /**
+     * A memoized variable that determines the button text based on the current state.
+     *
+     * The button text is dynamically calculated based on the following conditions:
+     * - If `showPlaceholder` is `true`, the text will be "Select Assets".
+     * - If no assets are selected (`selectedAssets` array is empty), the text will be "Select Assets".
+     * - If more than one asset is selected, the text will be "Multiple".
+     * - If only one asset is selected, the text will display the name of that asset,
+     *   provided it exists in the `assets` array. If the asset is not found, the text
+     *   will default to "Select Asset".
+     *
+     * Dependencies for memoization:
+     * - `showPlaceholder`: Boolean flag indicating whether to display the placeholder text.
+     * - `selectedAssets`: Array of selected asset IDs.
+     * - `assets`: Array of available asset objects, each containing an `id` and a `name` property.
+     */
     const buttonText = useMemo(() => {
         if (showPlaceholder) return 'Select Assets';
         if (selectedAssets.length === 0) return 'Select Assets';
@@ -22,6 +38,9 @@ function AssetSelection({ selectedAssets, setSelectedAssets }: AssetSelectionPro
         return asset?.name ?? 'Select Asset';
     }, [showPlaceholder, selectedAssets, assets]);
 
+    /**
+     * Fetches all assets from the Geotab API and updates the `assets` state.
+     */
     useEffect(() => {
         const getAssets = async () => {
             const assets: Asset[] = await geotabDevice.getAllTransfer();
@@ -30,15 +49,20 @@ function AssetSelection({ selectedAssets, setSelectedAssets }: AssetSelectionPro
         void getAssets();
     }, []);
 
+    /**
+     * Handles the addition or removal of an asset from the selected assets list.
+     *
+     * This function updates the state of selected assets based on the provided asset ID.
+     * - If the asset ID is already selected, it will be removed from the list of selected assets.
+     * - If the asset ID is "All Transfer", the list will be reset to include only "All Transfer".
+     * - Otherwise, adds the provided asset ID to the list, ensuring "All Transfer" is excluded if present.
+     *
+     * @param {string} assetId - The unique identifier of the asset to be added or removed.
+     */
     const handleAddAsset = (assetId: string) => {
         setSelectedAssets((prev) => {
-            // Remove the clicked asset if it's already selected
             if (prev.includes(assetId)) return prev.filter((id) => id !== assetId);
-
-            // Selecting "All Transfer" clears everything else
             if (assetId === 'All Transfer') return ['All Transfer'];
-
-            // Selecting a specific asset removes "All Transfer"
             return [...prev.filter((id) => id !== 'All Transfer'), assetId];
         });
     };
@@ -54,9 +78,8 @@ function AssetSelection({ selectedAssets, setSelectedAssets }: AssetSelectionPro
                 <ChevronDown />
             </MenuButton>
             <MenuItems
-                anchor="bottom"
                 className="mt-1 flex w-52 flex-col rounded border border-(--border-primary) bg-white shadow-lg
-                    shadow-gray-300 outline-none"
+                    shadow-gray-300 outline-none absolute"
             >
                 {assets.map((asset) => (
                     <MenuItem key={asset.id}>

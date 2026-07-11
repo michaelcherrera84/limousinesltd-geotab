@@ -27,11 +27,42 @@ function DateSelection({ selectedDate, setSelectedDate, setDateRange }: DateSele
     const [showPlaceholder, setShowPlaceholder] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
 
+    /**
+     * A memoized variable that determines the text to be displayed on a button.
+     *
+     * The value is dynamically determined based on the `showPlaceholder` and `selectedDate` states:
+     * - If `showPlaceholder` is true, the text will be set to "Select Dates".
+     * - Otherwise, it will display the value of `selectedDate`.
+     *
+     * Dependencies:
+     * - `showPlaceholder`: A boolean indicating whether to show the placeholder text.
+     * - `selectedDate`: A string representing the currently selected date.
+     */
     const buttonText = useMemo(() => {
         if (showPlaceholder) return 'Select Dates';
         return selectedDate;
     }, [showPlaceholder, selectedDate]);
 
+    /**
+     * Updates the selected date and sets the corresponding date range or state based on predefined date ranges.
+     *
+     * @param {string} item - The selected date range identifier. Possible values include:
+     *                        'Today', 'Yesterday', 'Last 24 Hours', 'Last 7 Days',
+     *                        'This Pay Period', 'Last Pay Period', or custom date range identifiers.
+     *
+     * Description:
+     * - When 'Today' is selected, sets the date range from the start of today to the start of tomorrow.
+     * - When 'Yesterday' is selected, sets the date range from the start of yesterday to the start of today.
+     * - When 'Last 24 Hours' is selected, sets the date range from 24 hours ago to the current time.
+     * - When 'Last 7 Days' is selected, sets the date range from 7 days ago to the current time.
+     * - When 'This Pay Period' is selected, calculates the start of the current pay period (Wednesday) and sets the date range.
+     * - When 'Last Pay Period' is selected, determines the previous pay period (Wednesday to Wednesday)
+     *   and sets the corresponding date range.
+     * - If the selected item falls outside the predefined ranges, opens the date selection modal.
+     *
+     * Side Effects:
+     * - Updates the state variables `selectedDate`, `dateRange`, and optionally toggles `isOpen`.
+     */
     const handleSelectDate = (item: string) => {
         setSelectedDate(item);
 
@@ -76,6 +107,18 @@ function DateSelection({ selectedDate, setSelectedDate, setDateRange }: DateSele
         }
     };
 
+    /**
+     * Processes and handles the custom date range selected by the user.
+     *
+     * This function validates the presence of `from` and `to` dates in the `customDateRange` object.
+     * If valid, it creates `Date` objects for the `from` and `to` dates. The `from` date is normalized
+     * to the start of the day (midnight), while the `to` date is adjusted to include the entire end
+     * day by setting it to the start of the next day (midnight).
+     *
+     * The processed date range is then stored in the application state via the `setDateRange` method.
+     * Additionally, a string representation of the selected date range is generated and saved using
+     * the `setSelectedDate` method.
+     */
     const handleCustomDateRange = () => {
         if (!customDateRange?.from || !customDateRange.to) return;
         const from = new Date(customDateRange.from);
@@ -99,9 +142,8 @@ function DateSelection({ selectedDate, setSelectedDate, setDateRange }: DateSele
                     <ChevronDown />
                 </MenuButton>
                 <MenuItems
-                    anchor="bottom"
-                    className="mt-1 flex w-52 flex-col rounded border border-(--border-primary) bg-white shadow-lg
-                        shadow-gray-300 outline-none"
+                    className="absolute mt-1 flex w-52 flex-col rounded border border-(--border-primary) bg-white
+                        shadow-lg shadow-gray-300 outline-none"
                 >
                     {dateMenuItems.map((item) => (
                         <MenuItem key={item}>
@@ -126,9 +168,9 @@ function DateSelection({ selectedDate, setSelectedDate, setDateRange }: DateSele
                     </MenuItem>
                 </MenuItems>
             </Menu>
-            <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-                <DialogBackdrop className="fixed inset-0 bg-black/30" />
-                <div className="fixed inset-0 flex w-screen items-center justify-center">
+            <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-999999">
+                <DialogBackdrop className="fixed inset-0 z-999999 bg-black/30" />
+                <div className="fixed inset-0 z-1000000 flex w-screen items-center justify-center">
                     <DialogPanel className="max-w-lg space-y-4 rounded-lg bg-white px-14 py-10 shadow-lg">
                         <DialogTitle className="text-primary text-lg font-black">Custom Date Range</DialogTitle>
                         <DayPicker

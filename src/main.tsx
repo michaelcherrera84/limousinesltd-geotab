@@ -1,30 +1,12 @@
 import ReactDOM from 'react-dom/client';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
-import { routeTree } from './routeTree.gen';
+import { RouterProvider } from '@tanstack/react-router';
+import { router } from './router';
+import { registerAddin } from '@/auth/addin.ts';
 
-const router = createRouter({
-    routeTree,
-    basepath: "/limousinesltd-geotab",
-    defaultPreload: 'intent',
-    scrollRestoration: true,
-});
-
-console.log("basepath:", router.options.basepath);
-console.log("location:", window.location.pathname);
-
-declare module '@tanstack/react-router' {
-    interface Register {
-        router: typeof router;
-    }
-}
-
-async function startApp() {
+export function startApp() {
     const rootElement = document.getElementById('app')!;
-
-    if (!rootElement.innerHTML) {
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(<RouterProvider router={router} />);
-    }
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<RouterProvider router={router} />);
 }
 
-void startApp();
+registerAddin(startApp);

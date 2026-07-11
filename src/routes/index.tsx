@@ -1,39 +1,51 @@
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
-import { useEffect } from 'react';
-import { geotabConnect } from '@/auth/geotab-connect.ts';
+import { createFileRoute } from '@tanstack/react-router';
+import { PiVan } from 'react-icons/pi';
+import { GoTable } from 'react-icons/go';
+import ReportCard from '#/components/report-card.tsx';
 
-export const Route = createFileRoute('/')({ component: LandingPage });
+export const Route = createFileRoute('/')({
+    head: () => ({
+        meta: [
+            { title: 'Limousines LTD Reports' },
+            {
+                name: 'Limousines LTD Reports',
+                content: 'Custom reports for Limousines LTD.',
+            },
+        ],
+    }),
+    component: ReportsDashboard,
+});
 
-function LandingPage() {
-    const router = useRouter();
-
-    useEffect(() => {
-        const getSession = async () => {
-            try {
-                await geotabConnect();
-                await router.navigate({ to: '/reports' });
-            } catch (error) {
-                console.error('Error connecting to Geotab:', error);
-                await router.navigate({ to: '/login' });
-            }
-        };
-        void getSession();
-    }, []);
-
+function ReportsDashboard() {
     return (
-        <div className="flex h-screen w-full flex-col p-16">
-            <header className="flex h-32 flex-col items-center justify-center gap-4">
-                <h1 className="text-xl font-bold">Welcome to the Limousines LTD Add-in</h1>
-                <p>
-                    This landing page is for development only. Geotab add-in items will be accessed directly via their
-                    individual urls.
-                </p>
-            </header>
-            <main className="flex h-full flex-col items-center justify-center">
-                <Link to="/login" className="btn-primary w-fit px-4! shadow-md">
-                    Login
-                </Link>
+        <section className="flex w-full flex-col">
+            <main className="p-6">
+                <div>
+                    <button
+                        className="flex h-8 min-w-24 items-center justify-center gap-3 rounded-full
+                            bg-(--button-primary) px-4 py-1 text-xs text-white"
+                    >
+                        <PiVan size={16} />
+                        Trips
+                        <b>1</b>
+                    </button>
+                </div>
+                <div className="grid grid-cols-3 gap-4 py-6">
+                    <ReportCard
+                        title="Trip Details"
+                        icon={<GoTable size={16} />}
+                        link="/trip-details-report"
+                        description="Detailed trips report including the driver, trip categorization, visited zones, distance, time, and Quickbooks customer name."
+                        tags={['Trips']}
+                    />
+                    <ReportCard
+                        title="Suggested Pay"
+                        link="/suggested-pay-report"
+                        description="Driver ticket estimation report that calculates the recommended hours and mileage for a driver's tickets over a selected date range."
+                        tags={['Trips', 'Accounting']}
+                    />
+                </div>
             </main>
-        </div>
+        </section>
     );
 }

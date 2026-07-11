@@ -9,14 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as TripDetailsReportRouteImport } from './routes/trip-details-report'
+import { Route as SuggestedPayReportRouteImport } from './routes/suggested-pay-report'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ReportsIndexRouteImport } from './routes/reports/index'
-import { Route as ReportsTripDetailsReportRouteImport } from './routes/reports/trip-details-report'
 
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const TripDetailsReportRoute = TripDetailsReportRouteImport.update({
+  id: '/trip-details-report',
+  path: '/trip-details-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuggestedPayReportRoute = SuggestedPayReportRouteImport.update({
+  id: '/suggested-pay-report',
+  path: '/suggested-pay-report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -24,59 +28,51 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReportsIndexRoute = ReportsIndexRouteImport.update({
-  id: '/reports/',
-  path: '/reports/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportsTripDetailsReportRoute =
-  ReportsTripDetailsReportRouteImport.update({
-    id: '/reports/trip-details-report',
-    path: '/reports/trip-details-report',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/reports/trip-details-report': typeof ReportsTripDetailsReportRoute
-  '/reports/': typeof ReportsIndexRoute
+  '/suggested-pay-report': typeof SuggestedPayReportRoute
+  '/trip-details-report': typeof TripDetailsReportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/reports/trip-details-report': typeof ReportsTripDetailsReportRoute
-  '/reports': typeof ReportsIndexRoute
+  '/suggested-pay-report': typeof SuggestedPayReportRoute
+  '/trip-details-report': typeof TripDetailsReportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/reports/trip-details-report': typeof ReportsTripDetailsReportRoute
-  '/reports/': typeof ReportsIndexRoute
+  '/suggested-pay-report': typeof SuggestedPayReportRoute
+  '/trip-details-report': typeof TripDetailsReportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/reports/trip-details-report' | '/reports/'
+  fullPaths: '/' | '/suggested-pay-report' | '/trip-details-report'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/reports/trip-details-report' | '/reports'
-  id: '__root__' | '/' | '/login' | '/reports/trip-details-report' | '/reports/'
+  to: '/' | '/suggested-pay-report' | '/trip-details-report'
+  id: '__root__' | '/' | '/suggested-pay-report' | '/trip-details-report'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
-  ReportsTripDetailsReportRoute: typeof ReportsTripDetailsReportRoute
-  ReportsIndexRoute: typeof ReportsIndexRoute
+  SuggestedPayReportRoute: typeof SuggestedPayReportRoute
+  TripDetailsReportRoute: typeof TripDetailsReportRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/trip-details-report': {
+      id: '/trip-details-report'
+      path: '/trip-details-report'
+      fullPath: '/trip-details-report'
+      preLoaderRoute: typeof TripDetailsReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/suggested-pay-report': {
+      id: '/suggested-pay-report'
+      path: '/suggested-pay-report'
+      fullPath: '/suggested-pay-report'
+      preLoaderRoute: typeof SuggestedPayReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -86,28 +82,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/reports/': {
-      id: '/reports/'
-      path: '/reports'
-      fullPath: '/reports/'
-      preLoaderRoute: typeof ReportsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reports/trip-details-report': {
-      id: '/reports/trip-details-report'
-      path: '/reports/trip-details-report'
-      fullPath: '/reports/trip-details-report'
-      preLoaderRoute: typeof ReportsTripDetailsReportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
-  ReportsTripDetailsReportRoute: ReportsTripDetailsReportRoute,
-  ReportsIndexRoute: ReportsIndexRoute,
+  SuggestedPayReportRoute: SuggestedPayReportRoute,
+  TripDetailsReportRoute: TripDetailsReportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

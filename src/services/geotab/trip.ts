@@ -31,7 +31,7 @@ export const geotabTrip: GeotabTrip = {
             const trips = (await api.call('Get', {
                 typeName: 'Trip',
                 search: {
-                    fromDate: new Date(new Date(currentTrip.start).getTime() - 24 * 60 * 60 * 1000),
+                    fromDate: new Date(new Date(currentTrip.start).getTime() - 48 * 60 * 60 * 1000),
                     toDate: currentTrip.stop,
                     deviceSearch: {
                         id: (currentTrip.device as Device).id,
@@ -66,7 +66,7 @@ export const geotabTrip: GeotabTrip = {
     async getByDriverAndDateRange(driverId: string, fromDate: Date, toDate: Date): Promise<Trip[]> {
         const api = getApi();
         try {
-            return (await api.call('Get', {
+            const trips = (await api.call('Get', {
                 typeName: 'Trip',
                 search: {
                     fromDate: fromDate.toISOString(),
@@ -77,6 +77,10 @@ export const geotabTrip: GeotabTrip = {
                     includeOverlappedTrips: true,
                 },
             })) as Trip[];
+
+            trips.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+
+            return trips;
         } catch (error) {
             console.error('Error fetching trips:', error);
             throw error;

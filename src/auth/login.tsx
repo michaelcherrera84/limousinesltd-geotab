@@ -1,28 +1,23 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { type FormEvent, useEffect, useState } from 'react';
-import { loadSession, saveSession } from '@/auth/session.ts';
+import { type SyntheticEvent, useState } from 'react';
 import GeotabApi from 'mg-api-js';
 import { setApi } from '@/auth/api.ts';
 
-export const Route = createFileRoute('/login')({
-    component: LoginPage,
-});
-
 function LoginPage() {
-    const router = useRouter();
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [database, setDatabase] = useState('');
     const [server, setServer] = useState('my.geotab.com');
 
-    useEffect(() => {
-        const session = loadSession();
-        if (session) {
-            router.navigate({ to: '/reports' });
-        }
-    }, [router]);
-
-    const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    /**
+     * Asynchronous function to handle the login process when a form is submitted.
+     *
+     * This function prevents the default form submission behavior,
+     * initializes a Geotab API instance with user-provided credentials,
+     * performs authentication, and updates the application state with the API instance.
+     *
+     * @param {SyntheticEvent} e - The form submission event.
+     */
+    const handleLogin = async (e: SyntheticEvent) => {
         e.preventDefault();
 
         const api = new GeotabApi({
@@ -35,32 +30,13 @@ function LoginPage() {
         });
 
         await api.authenticate();
-
         setApi(api);
-
-        const { credentials } = await api.getSession();
-
-        if (!credentials.sessionId) throw new Error('Failed to get session ID');
-
-        saveSession({
-            database: credentials.database,
-            userName: credentials.userName,
-            sessionId: credentials.sessionId,
-            server: server,
-        });
-
-        const session = loadSession();
-        if (session) {
-            await router.navigate({ to: '/reports' });
-        } else {
-            throw new Error('Failed to save session');
-        }
     };
 
     return (
         <div className="flex h-screen w-screen items-center justify-center">
-            <div className="flex flex-col items-center gap-4 shadow-lg rounded shadow-gray-400 p-12">
-                <h1 className="font-light text-2xl py-2">Login</h1>
+            <div className="flex flex-col items-center gap-4 rounded p-12 shadow-lg shadow-gray-400">
+                <h1 className="py-2 text-2xl font-light">Login</h1>
                 <form onSubmit={handleLogin} className="flex flex-col gap-4">
                     <div className="flex flex-col items-center gap-2">
                         <label htmlFor="userName">User Name</label>
@@ -102,9 +78,13 @@ function LoginPage() {
                             className="rounded border border-(--border-primary) p-2"
                         />
                     </div>
-                    <button type="submit" className="btn-primary mt-3">Sign In</button>
+                    <button type="submit" className="btn-primary mt-3">
+                        Sign In
+                    </button>
                 </form>
             </div>
         </div>
     );
 }
+
+export default LoginPage;
